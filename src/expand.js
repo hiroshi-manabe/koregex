@@ -8,7 +8,7 @@ import {
   allHangulSyllables,
   decomposeSyllable,
   isHangulSyllable,
-} from "./hangul.js?v=2026-05-23-1";
+} from "./hangul.js?v=2026-05-23-2";
 
 function uniq(values) {
   return [...new Set(values)];

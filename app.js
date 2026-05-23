@@ -1,4 +1,4 @@
-import { CACHE_VERSION } from "./src/cache-version.js?v=2026-05-23-1";
+import { CACHE_VERSION } from "./src/cache-version.js?v=2026-05-23-2";
 
 const { expandKoregex } = await import(`./src/expand.js?v=${CACHE_VERSION}`);
 
