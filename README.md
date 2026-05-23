@@ -134,6 +134,176 @@ For the final slot:
 This distinction lets users express both "must have batchim" and "may or may
 not have batchim".
 
+## Slot Compositions
+
+Koregex accepts multi-jamo spellings only when they are wrapped in an inner
+`{...}` slot composition.
+
+The outer `{...}` describes one Hangul syllable pattern. An inner `{...}`
+describes one composed slot value.
+
+Supported initial compositions:
+
+```text
+{ㄱㄱ} -> ㄲ
+{ㄷㄷ} -> ㄸ
+{ㅂㅂ} -> ㅃ
+{ㅅㅅ} -> ㅆ
+{ㅈㅈ} -> ㅉ
+```
+
+Supported vowel compositions:
+
+```text
+{ㅗㅏ} -> ㅘ
+{ㅗㅐ} -> ㅙ
+{ㅗㅣ} -> ㅚ
+{ㅜㅓ} -> ㅝ
+{ㅜㅔ} -> ㅞ
+{ㅜㅣ} -> ㅟ
+{ㅡㅣ} -> ㅢ
+```
+
+Supported final compositions:
+
+```text
+{ㄱㄱ} -> ㄲ
+{ㄱㅅ} -> ㄳ
+{ㄴㅈ} -> ㄵ
+{ㄴㅎ} -> ㄶ
+{ㄹㄱ} -> ㄺ
+{ㄹㅁ} -> ㄻ
+{ㄹㅂ} -> ㄼ
+{ㄹㅅ} -> ㄽ
+{ㄹㅌ} -> ㄾ
+{ㄹㅍ} -> ㄿ
+{ㄹㅎ} -> ㅀ
+{ㅂㅅ} -> ㅄ
+{ㅅㅅ} -> ㅆ
+```
+
+Examples:
+
+```regex
+{{ㄱㄱ}.}
+{.{ㅗㅏ}}
+{..{ㄹㄱ}}
+```
+
+Meanings:
+
+```text
+{{ㄱㄱ}.}  initial ㄲ, any vowel, no final
+{.{ㅗㅏ}}  any initial, vowel ㅘ, no final
+{..{ㄹㄱ}} any initial, any vowel, final ㄺ
+```
+
+Silent composition is not supported:
+
+```regex
+{ㄱㄱ.}
+{.ㅗㅏ}
+{..ㄹㄱ}
+```
+
+Unsupported decompositions also remain invalid, even when wrapped:
+
+```regex
+{.{ㅏㅣ}}
+{.ㅏㅣ}
+```
+
+These should not be treated as `{.ㅐ}`. The composition rule is intentionally
+limited to modern Unicode Hangul slot values listed above.
+
+## Character Classes
+
+Koregex supports slot-local character classes inside `{...}`.
+
+Positive classes include the listed slot values:
+
+```regex
+{[ㄱㄴㄷ]ㅏㄴ}
+{ㄱ[ㅏㅓㅗ]ㄴ}
+{ㄱㅏ[ㄴㄹㄺ]}
+```
+
+Meanings:
+
+```text
+{[ㄱㄴㄷ]ㅏㄴ}  initial ㄱ, ㄴ, or ㄷ; vowel ㅏ; final ㄴ
+{ㄱ[ㅏㅓㅗ]ㄴ}  initial ㄱ; vowel ㅏ, ㅓ, or ㅗ; final ㄴ
+{ㄱㅏ[ㄴㄹㄺ]}  initial ㄱ; vowel ㅏ; final ㄴ, ㄹ, or ㄺ
+```
+
+Negated classes exclude the listed slot values:
+
+```regex
+{[^ㄱㄴㄷ]ㅏㄴ}
+{ㄱ[^ㅏㅓㅗ]ㄴ}
+{ㄱㅏ[^ㄴㄹ]}
+```
+
+Meanings:
+
+```text
+{[^ㄱㄴㄷ]ㅏㄴ}  any initial except ㄱ, ㄴ, or ㄷ; vowel ㅏ; final ㄴ
+{ㄱ[^ㅏㅓㅗ]ㄴ}  initial ㄱ; any vowel except ㅏ, ㅓ, or ㅗ; final ㄴ
+{ㄱㅏ[^ㄴㄹ]}   initial ㄱ; vowel ㅏ; any non-empty final except ㄴ or ㄹ
+```
+
+For final classes, the empty final is not included unless `?` is added:
+
+```regex
+{ㄱㅏ[^ㄴ]}
+{ㄱㅏ[^ㄴ]?}
+```
+
+Meanings:
+
+```text
+{ㄱㅏ[^ㄴ]}   final must be non-empty and not ㄴ
+{ㄱㅏ[^ㄴ]?}  no final, or a non-empty final other than ㄴ
+```
+
+Class contents are explicit slot values. Inner slot compositions may be used
+inside classes when a combined value is needed.
+
+```regex
+{[ㄱㄱㄴ]ㅏ}
+{ㄱㅏ[ㄹㄱ]}
+{[{ㄱㄱ}ㄴ]ㅏ}
+{ㄱㅏ[ㄴ{ㄹㄱ}]}
+```
+
+Meanings:
+
+```text
+{[ㄱㄱㄴ]ㅏ}    initial ㄱ or ㄴ, not ㄲ
+{ㄱㅏ[ㄹㄱ]}    final ㄹ or ㄱ, not ㄺ
+{[{ㄱㄱ}ㄴ]ㅏ}  initial ㄲ or ㄴ
+{ㄱㅏ[ㄴ{ㄹㄱ}]} final ㄴ or ㄺ
+```
+
+Composed compatibility jamo may also be written directly:
+
+```regex
+{[ㄱㄲㄴ]ㅏ}
+{ㄱ[ㅘㅝ]ㄴ}
+{ㄱㅏ[ㄴㄺ]}
+```
+
+Unsupported class syntax for v1:
+
+```regex
+{[ㄱ-ㅎ]ㅏ}
+{ㄱ[]}
+{ㄱ[^]}
+```
+
+Ranges, escapes, empty classes, and regex-like class operations are not
+supported.
+
 ## Optional Final Slot
 
 `?` is allowed only after the final-position token.
@@ -193,27 +363,28 @@ The final slot is already filled.
 . cannot add another consonant to make ㄺ.
 ```
 
-However, for user convenience, Koregex should allow users to spell compound
-final consonants as multiple compatibility jamo in final position.
+For user convenience, Koregex allows users to spell compound final consonants
+with an inner slot composition.
 
 Examples:
 
 ```regex
-{..ㄹㄱ}
-{하ㄹㄱ}
-{하ㄹㄱ?}
+{..{ㄹㄱ}}
+{하{ㄹㄱ}}
+{하{ㄹㄱ}?}
 ```
 
 Meanings:
 
 ```text
-{..ㄹㄱ}   any initial, any vowel, final ㄺ
-{하ㄹㄱ}   핡
-{하ㄹㄱ?}  하 or 핡
+{..{ㄹㄱ}}   any initial, any vowel, final ㄺ
+{하{ㄹㄱ}}   핡
+{하{ㄹㄱ}?}  하 or 핡
 ```
 
-This means compound finals are accepted when written explicitly, but they are
-not constructed by appending `.` after a syllable that already has a final.
+Compound finals are accepted when written explicitly as a slot composition, but
+they are not constructed silently and are not created by appending `.` after a
+syllable that already has a final.
 
 Invalid examples:
 
@@ -285,7 +456,7 @@ compress adjacent matches into ranges for shorter output.
 
 ## Initial UI
 
-The first GitHub Pages UI can be intentionally small:
+The first GitHub Pages UI is intentionally small:
 
 ```text
 input textarea
@@ -299,6 +470,14 @@ The page should focus on conversion, not on becoming a full regex playground.
 
 A test-string matcher can be added later, but it is not required for the first
 usable version.
+
+The static page lives at the repository root:
+
+```text
+index.html
+styles.css
+app.js
+```
 
 ## Suggested Project Shape
 
@@ -320,9 +499,29 @@ web/
 
 The GitHub Pages app should consume the core converter library.
 
+## Development
+
+Run the logic tests with:
+
+```sh
+npm test
+```
+
+Preview the static UI locally with:
+
+```sh
+npm run serve
+```
+
+In environments where Homebrew binaries are not on `PATH`, use:
+
+```sh
+PATH=/usr/local/bin:$PATH npm test
+PATH=/usr/local/bin:$PATH npm run serve
+```
+
 ## Open Questions
 
-- Whether to support character classes inside `{...}`, such as `{[ㄱㄴㄷ]ㅏㄴ}`.
 - Whether to support multiple regex flavors, such as JavaScript, Python, and PCRE.
 - Whether output should prefer explicit character lists or compressed ranges.
 - Whether the UI should show warnings for valid but visually surprising patterns

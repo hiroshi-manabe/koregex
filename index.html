@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Koregex</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script type="module" src="./app.js"></script>
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <h1>Koregex</h1>
+          <p>Hangul-aware regex converter</p>
+        </div>
+        <a class="repo-link" href="https://github.com/hiroshi-manabe/koregex">GitHub</a>
+      </header>
+
+      <section class="workspace" aria-label="Converter">
+        <div class="pane">
+          <div class="pane-header">
+            <label for="source">Input</label>
+          </div>
+          <textarea id="source" spellcheck="false">{..ㄴ}다</textarea>
+        </div>
+
+        <div class="pane">
+          <div class="pane-header">
+            <label for="output">Output</label>
+            <button id="copy" class="icon-button" type="button" aria-label="Copy output">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="9" y="9" width="11" height="11" rx="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+            </button>
+          </div>
+          <textarea id="output" spellcheck="false" readonly></textarea>
+        </div>
+      </section>
+
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+
+      <section class="examples" aria-label="Examples">
+        <button type="button" data-example="{..ㄴ}다">{..ㄴ}다</button>
+        <button type="button" data-example="{하.?}">{하.?}</button>
+        <button type="button" data-example="{{ㄱㄱ}.}">{{ㄱㄱ}.}</button>
+        <button type="button" data-example="{ㄱ[{ㅗㅏ}{ㅜㅓ}]ㄴ}">{ㄱ[{ㅗㅏ}{ㅜㅓ}]ㄴ}</button>
+        <button type="button" data-example="{ㄱㅏ[^ㄴ]?}">{ㄱㅏ[^ㄴ]?}</button>
+      </section>
+    </main>
+  </body>
+</html>
