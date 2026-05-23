@@ -27,6 +27,15 @@ Normal regex syntax is preserved outside `{...}`.
 Only content inside `{...}` is treated as a Hangul syllable pattern. Each
 `{...}` block describes one Hangul syllable.
 
+Regex quantifier braces are preserved as ordinary regex:
+
+```regex
+a{1}
+a{1,}
+a{1,2}
+{..ㄴ}{1,2}
+```
+
 ```regex
 나는 {..ㄴ}다
 ```

@@ -22,6 +22,10 @@ function escapeCharClassChar(char) {
   return char.replace(/[\\\]\-\^]/g, "\\$&");
 }
 
+function isRegexQuantifier(block) {
+  return /^\d+(?:,\d*)?$/.test(block);
+}
+
 function composeSlotValue(source) {
   const composed =
     INITIAL_ALIASES.get(source) ?? VOWEL_ALIASES.get(source) ?? COMPOUND_FINALS.get(source);
@@ -273,7 +277,8 @@ export function expandKoregex(input) {
       throw new Error("Unclosed Hangul block");
     }
 
-    output += expandHangulBlock(input.slice(index + 1, endIndex));
+    const block = input.slice(index + 1, endIndex);
+    output += isRegexQuantifier(block) ? `{${block}}` : expandHangulBlock(block);
     index = endIndex;
   }
 

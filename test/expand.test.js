@@ -238,3 +238,10 @@ test("preserves ordinary regex outside Hangul blocks", () => {
   assert.match("나는 한다", regex);
   assert.doesNotMatch("나는 하다", regex);
 });
+
+test("preserves ordinary regex quantifier braces", () => {
+  assert.equal(expandKoregex("a{1}"), "a{1}");
+  assert.equal(expandKoregex("a{1,}"), "a{1,}");
+  assert.equal(expandKoregex("a{1,2}"), "a{1,2}");
+  assert.equal(expandKoregex("{..ㄴ}{1,2}"), `${expandHangulBlock("..ㄴ")}{1,2}`);
+});
