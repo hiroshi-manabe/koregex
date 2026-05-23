@@ -1,1 +1,1 @@
-export const CACHE_VERSION = "2026-05-23-3";
+export const CACHE_VERSION = "2026-05-23-4";

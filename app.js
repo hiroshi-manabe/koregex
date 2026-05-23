@@ -1,4 +1,4 @@
-import { CACHE_VERSION } from "./src/cache-version.js?v=2026-05-23-3";
+import { CACHE_VERSION } from "./src/cache-version.js?v=2026-05-23-4";
 
 const { expandKoregex } = await import(`./src/expand.js?v=${CACHE_VERSION}`);
 
@@ -88,6 +88,7 @@ const translations = {
 const source = document.querySelector("#source");
 const output = document.querySelector("#output");
 const status = document.querySelector("#status");
+const clear = document.querySelector("#clear");
 const copy = document.querySelector("#copy");
 const examples = document.querySelectorAll("[data-example]");
 const language = document.querySelector("#language");
@@ -121,13 +122,21 @@ function convert() {
     output.value = expandKoregex(source.value);
     status.textContent = "Ready";
     status.classList.remove("error");
+    clear.disabled = source.value.length === 0;
     copy.disabled = output.value.length === 0;
   } catch (error) {
     output.value = "";
     status.textContent = error.message;
     status.classList.add("error");
+    clear.disabled = source.value.length === 0;
     copy.disabled = true;
   }
+}
+
+function clearInput() {
+  source.value = "";
+  convert();
+  source.focus();
 }
 
 async function copyOutput() {
@@ -152,6 +161,7 @@ async function copyOutput() {
 }
 
 source.addEventListener("input", convert);
+clear.addEventListener("click", clearInput);
 copy.addEventListener("click", copyOutput);
 language.addEventListener("change", () => applyLanguage(language.value));
 
