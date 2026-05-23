@@ -488,6 +488,15 @@ styles.css
 app.js
 ```
 
+Static assets use query-string cache busting for GitHub Pages. When publishing
+a UI or converter change, bump the version in:
+
+```text
+index.html
+src/cache-version.js
+src/expand.js
+```
+
 ## Suggested Project Shape
 
 The project should be library-first so the converter is not tied to the web UI.

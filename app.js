@@ -1,4 +1,6 @@
-import { expandKoregex } from "./src/expand.js";
+import { CACHE_VERSION } from "./src/cache-version.js?v=2026-05-23-1";
+
+const { expandKoregex } = await import(`./src/expand.js?v=${CACHE_VERSION}`);
 
 const source = document.querySelector("#source");
 const output = document.querySelector("#output");
