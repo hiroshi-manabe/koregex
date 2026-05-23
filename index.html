@@ -4,8 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Koregex</title>
-    <link rel="stylesheet" href="./styles.css?v=2026-05-23-2" />
-    <script type="module" src="./app.js?v=2026-05-23-2"></script>
+    <link rel="stylesheet" href="./styles.css?v=2026-05-23-3" />
+    <script type="module" src="./app.js?v=2026-05-23-3"></script>
   </head>
   <body>
     <main class="app-shell">
@@ -50,45 +50,55 @@
       </section>
 
       <section class="reference" aria-label="Syntax reference">
-        <h2>Syntax</h2>
+        <div class="reference-header">
+          <h2 data-i18n="syntax.title">Syntax</h2>
+          <label class="language-select">
+            <span data-i18n="syntax.language">Language</span>
+            <select id="language">
+              <option value="en">English</option>
+              <option value="ko">한국어</option>
+              <option value="ja">日本語</option>
+            </select>
+          </label>
+        </div>
         <div class="reference-grid">
           <div>
-            <h3>Hangul Block</h3>
-            <p><code>{초중종}</code> describes one Hangul syllable. Outside braces, regex is preserved.</p>
+            <h3 data-i18n="block.title">Hangul Block</h3>
+            <p data-i18n-html="block.body"><code>{초중종}</code> describes one Hangul syllable. Outside braces, regex is preserved.</p>
             <dl>
-              <div><dt><code>{ㅎㅏㄴ}</code></dt><dd>exactly 한</dd></div>
-              <div><dt><code>{..ㄴ}</code></dt><dd>any initial, any vowel, final ㄴ</dd></div>
-              <div><dt><code>{하.?}</code></dt><dd>하, 학, 한, ...</dd></div>
+              <div><dt><code>{ㅎㅏㄴ}</code></dt><dd data-i18n="block.exact">exactly 한</dd></div>
+              <div><dt><code>{..ㄴ}</code></dt><dd data-i18n="block.final">any initial, any vowel, final ㄴ</dd></div>
+              <div><dt><code>{하.?}</code></dt><dd data-i18n="block.optional">하, 학, 한, ...</dd></div>
             </dl>
           </div>
 
           <div>
-            <h3>Wildcards</h3>
-            <p><code>.</code> means any value for that slot. In final position, it means any non-empty final.</p>
+            <h3 data-i18n="wildcard.title">Wildcards</h3>
+            <p data-i18n-html="wildcard.body"><code>.</code> means any value for that slot. In final position, it means any non-empty final.</p>
             <dl>
-              <div><dt><code>{ㅎ.}</code></dt><dd>ㅎ + any vowel + no final</dd></div>
-              <div><dt><code>{ㅎ..}</code></dt><dd>ㅎ + any vowel + any final</dd></div>
-              <div><dt><code>{ㅎ..?}</code></dt><dd>ㅎ + any vowel, with or without final</dd></div>
+              <div><dt><code>{ㅎ.}</code></dt><dd data-i18n="wildcard.noFinal">ㅎ + any vowel + no final</dd></div>
+              <div><dt><code>{ㅎ..}</code></dt><dd data-i18n="wildcard.anyFinal">ㅎ + any vowel + any final</dd></div>
+              <div><dt><code>{ㅎ..?}</code></dt><dd data-i18n="wildcard.optionalFinal">ㅎ + any vowel, with or without final</dd></div>
             </dl>
           </div>
 
           <div>
-            <h3>Composition</h3>
-            <p>Use inner braces to compose one slot value.</p>
+            <h3 data-i18n="composition.title">Composition</h3>
+            <p data-i18n="composition.body">Use inner braces to compose one slot value.</p>
             <dl>
-              <div><dt><code>{{ㄱㄱ}.}</code></dt><dd>initial ㄲ + any vowel + no final</dd></div>
-              <div><dt><code>{.{ㅗㅏ}}</code></dt><dd>any initial + vowel ㅘ + no final</dd></div>
-              <div><dt><code>{..{ㄹㄱ}}</code></dt><dd>any initial + any vowel + final ㄺ</dd></div>
+              <div><dt><code>{{ㄱㄱ}.}</code></dt><dd data-i18n="composition.initial">initial ㄲ + any vowel + no final</dd></div>
+              <div><dt><code>{.{ㅗㅏ}}</code></dt><dd data-i18n="composition.vowel">any initial + vowel ㅘ + no final</dd></div>
+              <div><dt><code>{..{ㄹㄱ}}</code></dt><dd data-i18n="composition.final">any initial + any vowel + final ㄺ</dd></div>
             </dl>
           </div>
 
           <div>
-            <h3>Classes</h3>
-            <p>Classes are slot-local. <code>^</code> negates the listed values.</p>
+            <h3 data-i18n="classes.title">Classes</h3>
+            <p data-i18n-html="classes.body">Classes are slot-local. <code>^</code> negates the listed values.</p>
             <dl>
-              <div><dt><code>{[ㄱㄴㄷ]ㅏㄴ}</code></dt><dd>initial ㄱ, ㄴ, or ㄷ</dd></div>
-              <div><dt><code>{ㄱㅏ[^ㄴ]?}</code></dt><dd>no final, or a final other than ㄴ</dd></div>
-              <div><dt><code>{ㄱㅏ[ㄴ{ㄹㄱ}]}</code></dt><dd>final ㄴ or ㄺ</dd></div>
+              <div><dt><code>{[ㄱㄴㄷ]ㅏㄴ}</code></dt><dd data-i18n="classes.initial">initial ㄱ, ㄴ, or ㄷ</dd></div>
+              <div><dt><code>{ㄱㅏ[^ㄴ]?}</code></dt><dd data-i18n="classes.negated">no final, or a final other than ㄴ</dd></div>
+              <div><dt><code>{ㄱㅏ[ㄴ{ㄹㄱ}]}</code></dt><dd data-i18n="classes.composed">final ㄴ or ㄺ</dd></div>
             </dl>
           </div>
         </div>

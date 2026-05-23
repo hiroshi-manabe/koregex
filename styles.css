@@ -195,11 +195,40 @@ textarea[readonly] {
   border-top: 1px solid var(--line);
 }
 
+.reference-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
 .reference h2 {
-  margin: 0 0 14px;
+  margin: 0;
   font-size: 20px;
   line-height: 1.25;
   letter-spacing: 0;
+}
+
+.language-select {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.language-select select {
+  min-height: 34px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 4px 30px 4px 9px;
+  background: #fff;
+  color: var(--text);
+  font: inherit;
+  text-transform: none;
 }
 
 .reference-grid {
@@ -277,6 +306,11 @@ code {
 
   .workspace {
     grid-template-columns: 1fr;
+  }
+
+  .reference-header {
+    align-items: start;
+    flex-direction: column;
   }
 
   .reference-grid {
